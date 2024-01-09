@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+</head>
+<style>
+    /*In CSS, vmin stands for viewport minimum. The vmin function is used to set the size 
+    of an element as a percentage of the minimum value between the viewport width or height. */
+
+    
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    body{
+        background-color:#548687;
+        text-align: center;
+    }
+    .h1{
+        padding:15px;
+    }
+    .container{
+        height: 70vh;
+        display: flex;
+        justify-content: center;
+        align-items:center;
+    }
+    .game{
+        height: 60vmin;
+        width: 60vmin;
+        display: flex;   /*for aliging boxes in one line*/
+        flex-wrap: wrap; /*if same is not present in same line then shift to next line */
+        justify-content: center;
+        align-items: center;
+        gap:1.5vmin;
+    }
+    .box{
+        height: 18vmin;
+        width: 18vmin;
+        border: none;
+        border-radius:1rem;
+        box-shadow:0 0 1rem rgba(0,0,0,0.3);
+        font-size:9vmin;
+        color:brown;
+        background-color: #fff;
+    }
+    #new{
+        padding: 12px;
+        border-radius: 1rem;
+        border:none;
+        box-shadow:0 0 1rem rgba(0,0,0,0.3);
+        background-color: #191913;
+        color:#fff;
+    }
+   .msg_container{
+    font-size: 30px;
+    padding: 13px;
+    font-weight: bolder;
+   }
+   .hide{
+    display: none;
+   }
+
+</style>
+<body>
+    <main>
+        <h1 class="h1">Tic Tac Toe</h1>
+        <div class="container">
+        <div class="game">
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button> 
+        </div>
+        </div>
+
+    <div class="msg_container hide">
+        <p id="msg">Winner</p>
+    </div>
+        
+    <button id="new"><h3>New Game</h3></button>
+
+    </main>
+  
+    <script>
+        let boxes = document.querySelectorAll(".box");
+        let n_btn = document.querySelector("#new");
+        let msg_con= document.querySelector(".msg_container");
+        let m= document.querySelector("#msg");
+
+        let turn0= true; //for turn of player 0
+        let count=0; //to count the number of turns
+
+        const winPattern=[
+        [0,1,2],
+        [0,3,6],
+        [0,4,8],
+        [1,4,7],
+        [2,5,8],
+        [2,4,6],
+        [3,4,5],
+        [6,7,8],
+        ];
+        
+        const new_game=()=>{
+            turn0=true;
+            enabled_Box();
+            msg_con.classList.add("hide");
+        }
+
+        boxes.forEach((box)=>{
+            box.addEventListener("click",()=>{
+                if(turn0){ 
+                    //player O
+                    box.innerText="O";
+                    count=count+1;
+                    turn0=false;
+                }else{  
+                    //player X
+                    box.innerText="X";
+                    count=count+1;
+                    turn0=true;
+                }
+                box.disabled=true; //box can be clicked onces 
+
+                checkWinner();
+            });
+        });
+        const enabled_Box=()=>{
+            for(let box of boxes){
+                box.disabled=false;
+                box.innerText="";
+            }
+        }
+
+        const disabled_Box=()=>{
+            for(let box of boxes){
+                box.disabled=true;
+            }
+        }
+        const showWinner=(winner)=>{
+            msg.innerText=`Congratulations!!!   Winner is ${winner}`;
+            msg_con.classList.remove("hide");
+            disabled_Box();
+        }
+        const drawGame=()=>{
+            msg.innerText="Draw Game";
+            msg_con.classList.remove("hide");
+        }
+
+        const checkWinner = () =>{
+             for(let pattern of winPattern){
+               
+                let posval1 =boxes[pattern[0]].innerText;
+                let posval2 =boxes[pattern[1]].innerText;
+                let posval3 =boxes[pattern[2]].innerText;
+
+                if(posval1 !="" && posval2 !="" && posval3 !=""){
+                    if(posval1==posval2 && posval2==posval3){
+                       showWinner(posval1);
+                    }
+                }
+             }
+            if(count==9){
+                drawGame();
+             }
+        }
+
+        n_btn.addEventListener("click",new_game);
+
+    </script>
+</body>
+</html>
